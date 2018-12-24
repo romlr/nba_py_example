@@ -11,7 +11,7 @@ app = Flask(__name__)
 def index():
 	"""Renders today's games on front page.
 	"""
-	datetime_today = datetime.today()
+	datetime_today = datetime(2018, 12, 22)
 	pretty_date_today = datetime_today.strftime("%b %d, %Y")
 
 	games = get_games(datetime_today)
@@ -33,6 +33,7 @@ def get_games(date):
 	scoreboard = nba_py.Scoreboard(month=date.month,
 								   day=date.day,
 								   year=date.year)
+
 	line_score = scoreboard.line_score()
 
 	# List of games
@@ -43,7 +44,8 @@ def get_games(date):
 	current_game_sequence = 0
 	game_sequence_counter = 0
 
-	for team in line_score:
+	for index, team in line_score.iterrows():
+
 		if (team["GAME_SEQUENCE"] != current_game_sequence):
 			current_game["TEAM_1_ABBREVIATION"] = team["TEAM_ABBREVIATION"]
 			current_game["TEAM_1_WINS_LOSSES"] = team["TEAM_WINS_LOSSES"]
